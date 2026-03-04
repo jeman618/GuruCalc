@@ -11,6 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import dev.csse.jcisne23.gurucalc.ui.CalcScreen
+import dev.csse.jcisne23.gurucalc.ui.CalcViewModel
 import dev.csse.jcisne23.gurucalc.ui.theme.GuruCalcTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,10 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             GuruCalcTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    CalcScreen(modifier = Modifier.fillMaxSize().padding(innerPadding))
                 }
             }
         }
@@ -42,6 +42,8 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     GuruCalcTheme {
-        Greeting("Android")
+        CalcScreen(
+            modifier = Modifier,
+        )
     }
 }
