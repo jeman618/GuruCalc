@@ -1,5 +1,6 @@
 package dev.csse.jcisne23.gurucalc.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import dev.csse.jcisne23.gurucalc.R
 import dev.csse.jcisne23.gurucalc.ui.theme.ConvertBlueButton
 import dev.csse.jcisne23.gurucalc.ui.theme.GreyButton
@@ -85,7 +87,7 @@ fun CalcButtons(model: CalcViewModel) {
 }
 
 @Composable
-fun ControlRow(model: CalcViewModel) {
+fun ControlRow(model: CalcViewModel, navController: NavController) {
 
     Row(
         modifier = Modifier
@@ -111,7 +113,9 @@ fun ControlRow(model: CalcViewModel) {
                 containerColor = GreyButton,
                 contentColor = Color.Black
             ),
-            onClick = {}
+            onClick = {
+                navController.navigate("convert")
+            }
         ) {
             Text(text = "Convert",
                 fontSize = 14.sp)
@@ -185,7 +189,7 @@ fun CalcConvertButtons(model: CalcViewModel) {
 }
 
 @Composable
-fun ConvertControlRow(model: CalcViewModel) {
+fun ConvertControlRow(model: CalcViewModel, navController: NavController) {
 
     Row(
         modifier = Modifier
@@ -201,7 +205,9 @@ fun ConvertControlRow(model: CalcViewModel) {
                 containerColor = GreyButton,
                 contentColor = Color.Black
             ),
-            onClick = {}
+            onClick = {
+                navController.navigate("home")
+            }
         ) {
             Text(text = "Calculator",
                 fontSize = 14.sp)
@@ -222,14 +228,13 @@ fun ConvertControlRow(model: CalcViewModel) {
 @Composable
 fun UnitButtons(model: CalcViewModel) {
 
-    var selectedButton by remember { mutableStateOf("Length") }
-    val units = listOf("Length", "$$$", "Temp", "Weight")
+    var selectedButton by remember { mutableStateOf(model.units[0]) }
     Row(modifier = Modifier
         .fillMaxWidth()
         .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically) {
-        units.forEach { unit ->
+        model.units.forEach { unit ->
             val isSelected = selectedButton == unit
             Button(
                 onClick = {
@@ -245,13 +250,15 @@ fun UnitButtons(model: CalcViewModel) {
             }
         }
     }
-    SimpleDropdown(model.options, selectedButton)
+    SimpleDropdown(model.options, selectedButton, model)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SimpleDropdown(options: Map<String, List<String>>, selectedButton: String) {
+fun SimpleDropdown(options: Map<String, List<String>>, selectedButton: String, model: CalcViewModel) {
 
+    var from by remember { mutableStateOf("Meter") }
+    var to by remember { mutableStateOf("Meter") }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -290,7 +297,10 @@ fun SimpleDropdown(options: Map<String, List<String>>, selectedButton: String) {
                             text = { Text(option) },
                             onClick = {
                                 selectedOption = option
+                                from = selectedOption
                                 expanded = false
+                                Log.d("CALC", "From: $from")
+                                model.convertOptions(selectedButton, from, to)
                             }
                         )
                     }
@@ -332,6 +342,9 @@ fun SimpleDropdown(options: Map<String, List<String>>, selectedButton: String) {
                             onClick = {
                                 selectedOption = option
                                 expanded = false
+                                to = selectedOption
+                                Log.d("CALC", "To: $to")
+                                model.convertOptions(selectedButton, from, to)
                             }
                         )
                     }

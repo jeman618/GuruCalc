@@ -8,8 +8,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -28,14 +32,15 @@ import dev.csse.jcisne23.gurucalc.ui.theme.ExpBackground
 import dev.csse.jcisne23.gurucalc.ui.theme.ExpSeparator
 
 @Composable
-fun CalcExp(input: TextFieldValue, output: String, clear: String, model: CalcViewModel) {
+fun CalcExp(input: TextFieldValue, output: String, screen: String, clear: String, model: CalcViewModel) {
     HorizontalDivider(thickness = 2.dp, color = ExpSeparator)
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(ExpBackground)
             .padding(6.dp)
-    ) {
+    )
+    {
         IconButton(
             onClick = {
                 if (clear == "current") {
@@ -72,11 +77,36 @@ fun CalcExp(input: TextFieldValue, output: String, clear: String, model: CalcVie
                     .weight(1f)
                     .background(ExpBackground)
             )
-
+            OutputExists(output, screen)
             Text(
                 modifier = Modifier,
                 text = output,
                 fontSize = 36.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun OutputExists(s: String, screen: String) {
+    return if (s.isEmpty()) {
+        Text(modifier = Modifier,
+            text = "",
+            fontSize = 36.sp
+        )
+    }
+    else {
+        if (screen == "home") {
+            Text(modifier = Modifier.padding(end = 32.dp),
+                text = "=",
+                fontSize = 36.sp
+            )
+        }
+        else {
+            Icon(
+                modifier = Modifier.padding(end = 32.dp),
+                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                contentDescription = "Converted to"
             )
         }
     }

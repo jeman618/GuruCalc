@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import dev.csse.jcisne23.gurucalc.ui.CalcApp
 import dev.csse.jcisne23.gurucalc.ui.CalcScreen
 import dev.csse.jcisne23.gurucalc.ui.CalcViewModel
 import dev.csse.jcisne23.gurucalc.ui.theme.GuruCalcTheme
@@ -22,28 +23,16 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             GuruCalcTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    CalcScreen(modifier = Modifier.fillMaxSize().padding(innerPadding))
+                    CalcApp()
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun CalcPreview() {
     GuruCalcTheme {
-        CalcScreen(
-            modifier = Modifier,
-        )
+        CalcApp()
     }
 }

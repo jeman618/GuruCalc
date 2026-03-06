@@ -29,6 +29,7 @@ fun HistorySection(model: CalcViewModel, modifier: Modifier) {
                 input = it.expression,
                 output = it.result,
                 clear = "history",
+                screen = "home",
                 model = model)
         }
     }

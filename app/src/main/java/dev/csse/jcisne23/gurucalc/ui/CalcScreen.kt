@@ -34,12 +34,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import dev.csse.jcisne23.gurucalc.R
 import dev.csse.jcisne23.gurucalc.ui.theme.ExpBackground
 
 @Composable
 fun CalcScreen(
-    modifier: Modifier,
+    navController: NavController,
     model: CalcViewModel = viewModel<CalcViewModel>()
 ) {
     Scaffold(
@@ -67,25 +68,13 @@ fun CalcScreen(
                         input = model.input.value,
                         output = model.output.value,
                         clear = "current",
+                        screen = "home",
                         model = model)
                 }
-                ControlRow(model)
+                ControlRow(model, navController)
                 CalcButtons(model)
             }
         }
     }
 
-}
-
-@Preview(
-    heightDp = 800,
-    widthDp = 400
-)
-@Composable
-fun CalcScreenPreview() {
-    CalcScreen(
-        modifier = Modifier
-            .height(800.dp)
-            .width(400.dp)
-    )
 }

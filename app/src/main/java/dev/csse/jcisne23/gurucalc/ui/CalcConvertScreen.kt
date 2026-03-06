@@ -32,11 +32,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import dev.csse.jcisne23.gurucalc.R
 
 @Composable
 fun CalcConvertScreen(
-    modifier: Modifier = Modifier,
+    navController: NavController,
     model: CalcViewModel = viewModel<CalcViewModel>()
 ) {
     Scaffold(
@@ -60,25 +61,13 @@ fun CalcConvertScreen(
                         input = model.input.value,
                         output = model.output.value,
                         clear = "current",
+                        screen = "convert",
                         model = model)
                 }
-                ConvertControlRow(model)
+                ConvertControlRow(model, navController)
                 CalcConvertButtons(model)
             }
         }
     }
 
-}
-
-@Preview(
-    heightDp = 800,
-    widthDp = 400
-)
-@Composable
-fun CalcConvertScreenPreview() {
-    CalcConvertScreen(
-        modifier = Modifier
-            .height(800.dp)
-            .width(450.dp)
-    )
 }
