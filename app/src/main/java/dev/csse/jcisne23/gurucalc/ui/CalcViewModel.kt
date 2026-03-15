@@ -1,9 +1,13 @@
 package dev.csse.jcisne23.gurucalc.ui
 
+import android.content.res.Configuration
 import android.icu.text.DecimalFormat
 import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -13,6 +17,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.TextUnit
@@ -25,6 +30,7 @@ import dev.csse.jcisne23.gurucalc.ui.theme.OrangeButton
 import java.util.EmptyStackException
 import java.util.Stack
 import kotlin.math.pow
+import kotlin.math.sqrt
 
 
 data class HistoryItem(
@@ -47,16 +53,24 @@ class CalcViewModel : ViewModel() {
     )
     var baseUnits = 0.0
 
+    fun onInputChange(newValue: TextFieldValue) {
+        input.value = newValue
+    }
+
     private fun precedence(op: Char): Int {
         return when(op) {
             '+', '-' -> 1
             '*', '/' -> 2
             '^' -> 3
+
             else -> 0
         }
     }
 
     private fun applyOperation(nums: Stack<Double>, op: Char) {
+        if (op == '√' && nums.size < 2) {
+            nums.push(sqrt(nums.pop()))
+        }
         if (nums.size < 2) return
 
         val b = nums.pop()
@@ -107,7 +121,7 @@ class CalcViewModel : ViewModel() {
     val s = input.value.text.replace("÷", "/")
                         .replace("x", "*")
                         .replace("²", "^2")
-    Log.d("CALC","INPUT RAW: ${s}")
+    Log.d("CalcViewModel","INPUT RAW: ${s}")
     if (!hasBalancedParentheses(s)) {
         output.value = "Error"
         return
@@ -148,7 +162,7 @@ class CalcViewModel : ViewModel() {
                     ops.pop() // remove '('
                 }
             }
-            '+', '-', '*', '/', '^' -> {
+            '+', '-', '*', '/', '^', '√' -> {
                 while (ops.isNotEmpty() &&
                     ops.peek() != '(' &&
                     precedence(ops.peek()) >= precedence(c)
@@ -160,8 +174,8 @@ class CalcViewModel : ViewModel() {
         }
         i++
     }
-    Log.d("CALC","NUMS: ${nums}")
-    Log.d("CALC", "OPS: ${ops}")
+    Log.d("CalcViewModel","NUMS: ${nums}")
+    Log.d("CalcViewModel", "OPS: ${ops}")
 
     // Final resolve
     while (ops.isNotEmpty()) {
@@ -174,7 +188,7 @@ class CalcViewModel : ViewModel() {
             output.value = df.format(result)
         }
         catch (err: EmptyStackException) {
-            Log.d("CALC", err.toString())
+            Log.d("CalcViewModel", err.toString())
         }
     }
 
@@ -226,16 +240,12 @@ class CalcViewModel : ViewModel() {
         if (text == "π") {
             increment("3.14157")
         }
-        else if (text == "√a") {
-            increment(text[0].toString())
-        }
         else if (text == "a²") {
             val s = input.value.text
             if (s.isNotEmpty()) {
                 val num = s[s.length - 1]
                 if (num == ')') {
                     val array = findParantheses(s)
-
                 }
                 else {
                     val newText = s.dropLast(1)
@@ -250,6 +260,28 @@ class CalcViewModel : ViewModel() {
             }
             else {
                 insert("()²")
+            }
+        }
+        else if (text == "√a") {
+            val s = input.value.text
+            if (s.isNotEmpty()) {
+                val num = s[s.length - 1]
+                if (num == ')') {
+                    val array = findParantheses(s)
+                }
+                else {
+                    val newText = s.dropLast(1)
+
+                    input.value = TextFieldValue(
+                        text = newText,
+                        selection = TextRange(input.value.text.length - 1)
+                    )
+                }
+                insert("√(${num})")
+                calculate()
+            }
+            else {
+                insert("√()")
             }
         }
         else {
@@ -297,17 +329,39 @@ class CalcViewModel : ViewModel() {
         text : String,
         modifier: Modifier = Modifier
     ) {
-        Button(
-            modifier = modifier.height(64.dp),
-            shape = RoundedCornerShape(20.dp),
-            onClick = {increment(text)},
-                    colors = ButtonDefaults.buttonColors(
+        val configuration = LocalConfiguration.current
+        val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        if (isLandscape) {
+            Button(
+                modifier = modifier.width(32.dp),
+                shape = RoundedCornerShape(20.dp),
+                onClick = { increment(text) },
+                colors = ButtonDefaults.buttonColors(
                     containerColor = GreyButton,
-            contentColor = Color.Black
-        )
-        ) {
-            Text(text = text,
-                fontSize = 30.sp)
+                    contentColor = Color.Black
+                )
+            ) {
+                Text(
+                    text = text,
+                    fontSize = 20.sp
+                )
+            }
+        }
+        else {
+            Button(
+                modifier = modifier.height(64.dp),
+                shape = RoundedCornerShape(20.dp),
+                onClick = { increment(text) },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = GreyButton,
+                    contentColor = Color.Black
+                )
+            ) {
+                Text(
+                    text = text,
+                    fontSize = 30.sp
+                )
+            }
         }
     }
 
@@ -316,26 +370,53 @@ class CalcViewModel : ViewModel() {
         text: String,
         modifier: Modifier = Modifier
     ) {
-        Button(
-            modifier = modifier.height(64.dp),
-            shape = RoundedCornerShape(20.dp),
-            onClick = {
-                if (text != "↵") {
-                    increment(text)
-                }
-                else {
-                    evaluate()
-                }
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = OrangeButton,
-                contentColor = Color.White
-            )
-        ) {
-            Text(
-                text = text,
-                fontSize = 30.sp
-            )
+        val configuration = LocalConfiguration.current
+        val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        if (isLandscape) {
+            Button(
+                modifier = modifier.width(32.dp),
+                shape = RoundedCornerShape(20.dp),
+                onClick = {
+                    if (text != "↵") {
+                        increment(text)
+                    }
+                    else {
+                        evaluate()
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = OrangeButton,
+                    contentColor = Color.White
+                )
+            ) {
+                Text(
+                    text = text,
+                    fontSize = 20.sp
+                )
+            }
+        }
+        else {
+            Button(
+                modifier = modifier.height(64.dp),
+                shape = RoundedCornerShape(20.dp),
+                onClick = {
+                    if (text != "↵") {
+                        increment(text)
+                    }
+                    else {
+                        evaluate()
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = OrangeButton,
+                    contentColor = Color.White
+                )
+            ) {
+                Text(
+                    text = text,
+                    fontSize = 30.sp
+                )
+            }
         }
     }
 
@@ -351,23 +432,47 @@ class CalcViewModel : ViewModel() {
         text: String,
         modifier: Modifier = Modifier
     ) {
-        Button(
-            modifier = modifier
-                .height(64.dp),
-            contentPadding = PaddingValues(0.dp),
-            shape = RoundedCornerShape(20.dp),
-            onClick = {SpecOperation(text)},
-            colors = ButtonDefaults.buttonColors(
-                containerColor = BlueButton,
-                contentColor = Color.Black
-            )
-        ) {
-            Text(
-                text = text,
-                maxLines = 1,
-                fontSize = sizes(text),
-                softWrap = false
-            )
+        val configuration = LocalConfiguration.current
+        val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        if (isLandscape) {
+            Button(
+                modifier = modifier
+                    .width(32.dp),
+                contentPadding = PaddingValues(0.dp),
+                shape = RoundedCornerShape(20.dp),
+                onClick = {SpecOperation(text)},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = BlueButton,
+                    contentColor = Color.Black
+                )
+            ) {
+                Text(
+                    text = text,
+                    maxLines = 1,
+                    fontSize = sizes(text),
+                    softWrap = false
+                )
+            }
+        }
+        else {
+            Button(
+                modifier = modifier
+                    .height(64.dp),
+                contentPadding = PaddingValues(0.dp),
+                shape = RoundedCornerShape(20.dp),
+                onClick = {SpecOperation(text)},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = BlueButton,
+                    contentColor = Color.Black
+                )
+            ) {
+                Text(
+                    text = text,
+                    maxLines = 1,
+                    fontSize = sizes(text),
+                    softWrap = false
+                )
+            }
         }
     }
 

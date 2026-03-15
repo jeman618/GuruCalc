@@ -1,5 +1,6 @@
 package dev.csse.jcisne23.gurucalc.ui
 
+import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,11 +39,16 @@ import dev.csse.jcisne23.gurucalc.ui.theme.ConvertBlueButton
 import dev.csse.jcisne23.gurucalc.ui.theme.GreyButton
 
 @Composable
-fun CalcButtons(model: CalcViewModel) {
+fun CalcButtons(
+    model: CalcViewModel,
+    modifier: Modifier
+) {
 
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
     Column(
-        modifier = Modifier.padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        modifier = modifier.padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
+        verticalArrangement = if (isLandscape) Arrangement.spacedBy(0.dp) else Arrangement.spacedBy(12.dp)
     ) {
 
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -136,9 +143,11 @@ fun ControlRow(model: CalcViewModel, navController: NavController) {
 @Composable
 fun CalcConvertButtons(model: CalcViewModel) {
 
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
     Column(
-        modifier = Modifier.padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
+        verticalArrangement = if (isLandscape) Arrangement.spacedBy(0.dp) else Arrangement.spacedBy(12.dp)
     ) {
 
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {

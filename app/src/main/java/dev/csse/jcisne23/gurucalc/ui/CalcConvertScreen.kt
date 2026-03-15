@@ -1,71 +1,86 @@
 package dev.csse.jcisne23.gurucalc.ui
 
-import android.service.controls.Control
-import androidx.compose.foundation.Image
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import dev.csse.jcisne23.gurucalc.R
 
 @Composable
 fun CalcConvertScreen(
     navController: NavController,
     model: CalcViewModel = viewModel<CalcViewModel>()
 ) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {CalcAppBar()}
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-            ) {
-                UnitButtons(model)
+            if (isLandscape) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .weight(0.5f),
+                        verticalArrangement = Arrangement.Bottom
+                    ) {
+                        UnitButtons(model)
+                        CalcExp(
+                            input = model.input.value,
+                            output = model.output.value,
+                            clear = "current",
+                            screen = "convert",
+                            model = model
+                        )
+                    }
+                    Column(
+                        modifier = Modifier
+                            .weight(0.5f)
+                            .padding(0.dp)
+                    ) {
+                        ConvertControlRow(model, navController)
+                        CalcConvertButtons(model)
+                    }
+                }
+            }
+            else {
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    verticalArrangement = Arrangement.Bottom
+                        .fillMaxSize(),
                 ) {
-                    CalcExp(
-                        input = model.input.value,
-                        output = model.output.value,
-                        clear = "current",
-                        screen = "convert",
-                        model = model)
+                    UnitButtons(model)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        verticalArrangement = Arrangement.Bottom
+                    ) {
+                        CalcExp(
+                            input = model.input.value,
+                            output = model.output.value,
+                            clear = "current",
+                            screen = "convert",
+                            model = model
+                        )
+                    }
+                    ConvertControlRow(model, navController)
+                    CalcConvertButtons(model)
                 }
-                ConvertControlRow(model, navController)
-                CalcConvertButtons(model)
             }
         }
     }
