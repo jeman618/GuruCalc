@@ -331,37 +331,19 @@ class CalcViewModel : ViewModel() {
     ) {
         val configuration = LocalConfiguration.current
         val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        if (isLandscape) {
-            Button(
-                modifier = modifier.width(32.dp),
-                shape = RoundedCornerShape(20.dp),
-                onClick = { increment(text) },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = GreyButton,
-                    contentColor = Color.Black
-                )
-            ) {
-                Text(
-                    text = text,
-                    fontSize = 20.sp
-                )
-            }
-        }
-        else {
-            Button(
-                modifier = modifier.height(64.dp),
-                shape = RoundedCornerShape(20.dp),
-                onClick = { increment(text) },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = GreyButton,
-                    contentColor = Color.Black
-                )
-            ) {
-                Text(
-                    text = text,
-                    fontSize = 30.sp
-                )
-            }
+        Button(
+            modifier = if (isLandscape) modifier.width(32.dp) else modifier.width(64.dp).height(64.dp),
+            shape = RoundedCornerShape(20.dp),
+            onClick = { increment(text) },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = GreyButton,
+                contentColor = Color.Black
+            )
+        ) {
+            Text(
+                text = text,
+                fontSize = if (isLandscape) 20.sp else 30.sp
+            )
         }
     }
 
@@ -372,51 +354,24 @@ class CalcViewModel : ViewModel() {
     ) {
         val configuration = LocalConfiguration.current
         val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        if (isLandscape) {
-            Button(
-                modifier = modifier.width(32.dp),
-                shape = RoundedCornerShape(20.dp),
-                onClick = {
-                    if (text != "↵") {
-                        increment(text)
-                    }
-                    else {
-                        evaluate()
-                    }
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = OrangeButton,
-                    contentColor = Color.White
-                )
-            ) {
-                Text(
-                    text = text,
-                    fontSize = 20.sp
-                )
-            }
-        }
-        else {
-            Button(
-                modifier = modifier.height(64.dp),
-                shape = RoundedCornerShape(20.dp),
-                onClick = {
-                    if (text != "↵") {
-                        increment(text)
-                    }
-                    else {
-                        evaluate()
-                    }
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = OrangeButton,
-                    contentColor = Color.White
-                )
-            ) {
-                Text(
-                    text = text,
-                    fontSize = 30.sp
-                )
-            }
+        Button(
+            modifier = if (isLandscape) modifier.width(32.dp) else modifier.width(64.dp).height(64.dp),
+            shape = RoundedCornerShape(20.dp),
+            onClick = {
+                if (text != "↵")
+                    increment(text)
+                else
+                    evaluate()
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = OrangeButton,
+                contentColor = Color.White
+            )
+        ) {
+            Text(
+                text = text,
+                fontSize = if (isLandscape) 20.sp else 30.sp
+            )
         }
     }
 
@@ -434,45 +389,22 @@ class CalcViewModel : ViewModel() {
     ) {
         val configuration = LocalConfiguration.current
         val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        if (isLandscape) {
-            Button(
-                modifier = modifier
-                    .width(32.dp),
-                contentPadding = PaddingValues(0.dp),
-                shape = RoundedCornerShape(20.dp),
-                onClick = {SpecOperation(text)},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = BlueButton,
-                    contentColor = Color.Black
-                )
-            ) {
-                Text(
-                    text = text,
-                    maxLines = 1,
-                    fontSize = sizes(text),
-                    softWrap = false
-                )
-            }
-        }
-        else {
-            Button(
-                modifier = modifier
-                    .height(64.dp),
-                contentPadding = PaddingValues(0.dp),
-                shape = RoundedCornerShape(20.dp),
-                onClick = {SpecOperation(text)},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = BlueButton,
-                    contentColor = Color.Black
-                )
-            ) {
-                Text(
-                    text = text,
-                    maxLines = 1,
-                    fontSize = sizes(text),
-                    softWrap = false
-                )
-            }
+        Button(
+            modifier = if (isLandscape) modifier.width(32.dp) else modifier.width(64.dp).height(64.dp),
+            contentPadding = PaddingValues(0.dp),
+            shape = RoundedCornerShape(20.dp),
+            onClick = {SpecOperation(text)},
+            colors = ButtonDefaults.buttonColors(
+                containerColor = BlueButton,
+                contentColor = Color.Black
+            )
+        ) {
+            Text(
+                text = text,
+                maxLines = 1,
+                fontSize = sizes(text),
+                softWrap = false
+            )
         }
     }
 
