@@ -1,3 +1,5 @@
+# [Demo Video](https://youtu.be/yblZoaDaulg)
+
 # Project Vision
 
 For any users that want to have a calculator that also acts as a unit conversion tool, GuruCalc is the application made just for them. 
@@ -10,11 +12,7 @@ four units. Users will be able to convert meters to feet, US dollars to Yuan, Fa
 
 <img width="464" height="487" alt="image" src="https://github.com/user-attachments/assets/658e6033-f05b-4a66-9c28-ee54d050fbc4" />
 
-
 [Figma Project](https://www.figma.com/design/tukXiS0nkcuXNRK6cJD4gC/GuruCalc?node-id=2-53&t=ANS0MhKGoLpqSPsm-1)
-
-# Demo Video![60CA566E-0DE2-417E-A737-9AEE9A6BD5C7_1_102_o](https://github.com/user-attachments/assets/b147df96-42df-436b-9e46-7590c8d72baf)
-
 
 # Android and Jetpack Compose Features
 
