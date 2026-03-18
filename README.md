@@ -13,6 +13,9 @@ four units. Users will be able to convert meters to feet, US dollars to Yuan, Fa
 
 [Figma Project](https://www.figma.com/design/tukXiS0nkcuXNRK6cJD4gC/GuruCalc?node-id=2-53&t=ANS0MhKGoLpqSPsm-1)
 
+# Demo Video![60CA566E-0DE2-417E-A737-9AEE9A6BD5C7_1_102_o](https://github.com/user-attachments/assets/b147df96-42df-436b-9e46-7590c8d72baf)
+
+
 # Android and Jetpack Compose Features
 
 Here are a list of Android and Jetpack Compose Features that make this app possible:
