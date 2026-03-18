@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Guru Calc"
+rootProject.name = "GuruCalc"
 include(":app")
