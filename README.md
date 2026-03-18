@@ -8,7 +8,8 @@ four units. Users will be able to convert meters to feet, US dollars to Yuan, Fa
 
 # Figma Design
 
-<img width="529" height="565" alt="image" src="https://github.com/user-attachments/assets/99cdabb5-96b9-4b8c-9d72-5d4451cd23ec" />
+<img width="464" height="487" alt="image" src="https://github.com/user-attachments/assets/658e6033-f05b-4a66-9c28-ee54d050fbc4" />
+
 
 [Figma Project](https://www.figma.com/design/tukXiS0nkcuXNRK6cJD4gC/GuruCalc?node-id=2-53&t=ANS0MhKGoLpqSPsm-1)
 
